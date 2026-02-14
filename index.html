@@ -17,11 +17,11 @@
         }
         .card {
             width: 400px;
-            height: 295px;
+            height: 280px;  /* 🔴 REDUCIDA DE 295px a 280px */
             background: rgba(15,20,30,0.2);
             backdrop-filter: blur(12px);
             border-radius: 20px;
-            padding: 10px;
+            padding: 8px 10px 6px 10px;  /* 🔴 PADDING INFERIOR REDUCIDO */
             border: 1px solid rgba(255,255,255,0.15);
             display: flex;
             flex-direction: column;
@@ -32,7 +32,7 @@
             aspect-ratio: 16/9;
             border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 6px;
+            margin-bottom: 4px;  /* 🔴 MARGEN REDUCIDO */
             background: #000;
             flex-shrink: 0;
         }
@@ -79,7 +79,7 @@
             color: white;
             font-size: 13px;
             font-weight: 700;
-            margin-bottom: 3px;
+            margin-bottom: 2px;  /* 🔴 MARGEN REDUCIDO */
             line-height: 1.2;
             white-space: nowrap;
             overflow: hidden;
@@ -89,8 +89,8 @@
         .description {
             color: rgba(255,255,255,0.8);
             font-size: 10px;
-            margin-bottom: 4px;
-            line-height: 1.3;
+            margin-bottom: 3px;  /* 🔴 MARGEN REDUCIDO */
+            line-height: 1.2;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -104,6 +104,7 @@
             font-size: 10px;
             flex-wrap: wrap;
             flex-shrink: 0;
+            margin-top: 0;  /* 🔴 ELIMINADO MARGEN SUPERIOR */
         }
         .channel-name {
             color: #ff4d4d;
@@ -147,29 +148,29 @@
     </div>
 
     <script>
-        // 🟢🔴 SOLO TIENES QUE PONER LAS URLs DE TUS VIDEOS AQUÍ 🔴🟢
+        // 🟢🔴 TUS VIDEOS - YA ESTÁN TODOS PUESTOS 🔴🟢
         const VIDEOS = [
             {
                 url: 'https://ia903107.us.archive.org/23/items/como-era-realmente-jesus-la-apariencia-olvidada-por-la-historia-mas-alla-de-la-imagen-tradicional/%C2%BFC%C3%B3mo%20Era%20Realmente%20Jes%C3%BAs_%20La%20Apariencia%20Olvidada%20por%20la%20Historia%2C%20M%C3%A1s%20All%C3%A1%20de%20la%20Imagen%20Tradicional.mp4',
                 identifier: 'como-era-realmente-jesus-la-apariencia-olvidada-por-la-historia-mas-alla-de-la-imagen-tradicional'
             },
             {
-                url: 'https://ia903204.us.archive.org/5/items/somos-mas-que-un-cuerpo-el-experimento-gateway-y-la-prueba-del-alma/%C2%BFSomos%20M%C3%A1s%20Que%20un%20Cuerpo_%20El%20Experimento%20Gateway%20y%20la%20Prueba%20del%20Alma.mp4',  // ← PON AQUÍ TU SEGUNDA URL
-                identifier: 'IDENTIFICADOR_DEL_SEGUNDO_VIDEO'  // ← IDENTIFICADOR (opcional)
+                url: 'https://ia903204.us.archive.org/5/items/somos-mas-que-un-cuerpo-el-experimento-gateway-y-la-prueba-del-alma/%C2%BFSomos%20M%C3%A1s%20Que%20un%20Cuerpo_%20El%20Experimento%20Gateway%20y%20la%20Prueba%20del%20Alma.mp4',
+                identifier: 'somos-mas-que-un-cuerpo-el-experimento-gateway-y-la-prueba-del-alma'
             },
             {
-                url: 'https://ia600407.us.archive.org/7/items/nacemos-con-maldad-la-verdad-sobre-el-origen-del-mal-humano-humannature-darkpsychology-devil/%C2%BFNacemos%20con%20Maldad_%20%20La%20Verdad%20Sobre%20el%20Origen%20del%20Mal%20Humano%20%23humannature%20%20%23darkpsychology%20%23devil.mp4',  // ← PON AQUÍ TU TERCERA URL
-                identifier: 'IDENTIFICADOR_DEL_TERCER_VIDEO'
+                url: 'https://ia600407.us.archive.org/7/items/nacemos-con-maldad-la-verdad-sobre-el-origen-del-mal-humano-humannature-darkpsychology-devil/%C2%BFNacemos%20con%20Maldad_%20%20La%20Verdad%20Sobre%20el%20Origen%20del%20Mal%20Humano%20%23humannature%20%20%23darkpsychology%20%23devil.mp4',
+                identifier: 'nacemos-con-maldad-la-verdad-sobre-el-origen-del-mal-humano-humannature-darkpsychology-devil'
             },
             {
-                url: 'https://ia601003.us.archive.org/18/items/agharta-los-documentos-clasificados-que-prueban-la-civilizacion-bajo-nuestros-pies-secretos-nazi/AGHARTA_%20Los%20DOCUMENTOS%20CLASIFICADOS%20que%20Prueban%20la%20Civilizaci%C3%B3n%20Bajo%20Nuestros%20Pies%20_%20Secretos%20Nazi.mp4',  // ← PON AQUÍ TU CUARTA URL
-                identifier: 'IDENTIFICADOR_DEL_CUARTO_VIDEO'
+                url: 'https://ia601003.us.archive.org/18/items/agharta-los-documentos-clasificados-que-prueban-la-civilizacion-bajo-nuestros-pies-secretos-nazi/AGHARTA_%20Los%20DOCUMENTOS%20CLASIFICADOS%20que%20Prueban%20la%20Civilizaci%C3%B3n%20Bajo%20Nuestros%20Pies%20_%20Secretos%20Nazi.mp4',
+                identifier: 'agharta-los-documentos-clasificados-que-prueban-la-civilizacion-bajo-nuestros-pies-secretos-nazi'
             },
             {
-                url: 'https://ia903209.us.archive.org/35/items/que-hay-despue-s-de-morir-la-respuesta-que-cambiara-tu-forma-de-vivir-muerte-masalla-despertar/%C2%BFQu%C3%A9%20hay%20DESPU%C3%89S%20de%20morir_%20La%20RESPUESTA%20que%20cambiar%C3%A1%20tu%20forma%20de%20vivir%20%23muerte%20%23m%C3%A1sall%C3%A1%20%23despertar.mp4',  // ← PON AQUÍ TU QUINTA URL
-                identifier: 'IDENTIFICADOR_DEL_QUINTO_VIDEO'
+                url: 'https://ia903209.us.archive.org/35/items/que-hay-despue-s-de-morir-la-respuesta-que-cambiara-tu-forma-de-vivir-muerte-masalla-despertar/%C2%BFQu%C3%A9%20hay%20DESPU%C3%89S%20de%20morir_%20La%20RESPUESTA%20que%20cambiar%C3%A1%20tu%20forma%20de%20vivir%20%23muerte%20%23m%C3%A1sall%C3%A1%20%23despertar.mp4',
+                identifier: 'que-hay-despue-s-de-morir-la-respuesta-que-cambiara-tu-forma-de-vivir-muerte-masalla-despertar'
             }
-        ].filter(v => v.url && v.url !== 'URL_DEL_SEGUNDO_VIDEO_AQUI'); // Elimina videos vacíos
+        ];
 
         let currentIndex = 0;
         const videoElement = document.getElementById('mainVideo');
@@ -219,23 +220,15 @@
             // Actualizar contador
             counterElement.textContent = `🎬 ${currentIndex + 1}/${VIDEOS.length}`;
             
-            // Cargar metadata si hay identifier
-            if (video.identifier && video.identifier !== 'IDENTIFICADOR_DEL_SEGUNDO_VIDEO') {
-                const metadata = await cargarMetadata(video.identifier);
-                titleElement.textContent = metadata.title;
-                descElement.textContent = metadata.description.substring(0, 80) + 
-                    (metadata.description.length > 80 ? '...' : '');
-                dateElement.innerHTML = `📅 ${metadata.date}`;
-                viewsElement.innerHTML = `👁️ ${metadata.views}`;
-            } else {
-                // Valores por defecto
-                titleElement.textContent = 'Video en reproducción';
-                descElement.textContent = 'Contenido audiovisual';
-                dateElement.innerHTML = '📅 14 feb 2026';
-                viewsElement.innerHTML = '👁️ ---';
-            }
+            // Cargar metadata
+            const metadata = await cargarMetadata(video.identifier);
+            titleElement.textContent = metadata.title;
+            descElement.textContent = metadata.description.substring(0, 80) + 
+                (metadata.description.length > 80 ? '...' : '');
+            dateElement.innerHTML = `📅 ${metadata.date}`;
+            viewsElement.innerHTML = `👁️ ${metadata.views}`;
             
-            // Avanzar al siguiente índice para la próxima vez
+            // Avanzar al siguiente índice
             currentIndex = (currentIndex + 1) % VIDEOS.length;
         }
 
@@ -244,7 +237,6 @@
 
         // Iniciar con el primer video
         if (VIDEOS.length > 0) {
-            // Mostrar el primer video sin avanzar el índice
             const primerVideo = VIDEOS[0];
             videoSource.src = primerVideo.url;
             videoElement.load();
@@ -252,28 +244,21 @@
             counterElement.textContent = `🎬 1/${VIDEOS.length}`;
             
             // Cargar metadata del primer video
-            if (primerVideo.identifier && primerVideo.identifier !== 'IDENTIFICADOR_DEL_SEGUNDO_VIDEO') {
-                (async () => {
-                    const metadata = await cargarMetadata(primerVideo.identifier);
-                    titleElement.textContent = metadata.title;
-                    descElement.textContent = metadata.description.substring(0, 80) + 
-                        (metadata.description.length > 80 ? '...' : '');
-                    dateElement.innerHTML = `📅 ${metadata.date}`;
-                    viewsElement.innerHTML = `👁️ ${metadata.views}`;
-                })();
-            }
+            (async () => {
+                const metadata = await cargarMetadata(primerVideo.identifier);
+                titleElement.textContent = metadata.title;
+                descElement.textContent = metadata.description.substring(0, 80) + 
+                    (metadata.description.length > 80 ? '...' : '');
+                dateElement.innerHTML = `📅 ${metadata.date}`;
+                viewsElement.innerHTML = `👁️ ${metadata.views}`;
+            })();
             
-            // Establecer el índice para el siguiente video
             currentIndex = 1 % VIDEOS.length;
         }
 
-        // Si solo hay un video, que se repita infinitamente
         if (VIDEOS.length === 1) {
             videoElement.loop = true;
         }
     </script>
 </body>
 </html>
-
-
-
