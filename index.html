@@ -37,13 +37,7 @@
             background: #000;
             flex-shrink: 0;
         }
-        .thumb video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .thumb img {
+        .thumb video, .thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -133,28 +127,106 @@
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="thumb">
-            <!-- VIDEO QUE SE REPRODUCE AUTOMÁTICAMENTE -->
-            <video autoplay loop muted playsinline>
-                <source src="https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video.mp4" type="video/mp4">
-                Tu navegador no soporta la etiqueta de video.
-            </video>
-            <div class="live">ARCHIVO W</div>
-            <div class="progress"><div class="bar"></div></div>
-        </div>
-        
-        <div class="title">Título del video</div>
-        <div class="description">Descripción del video.</div>
-        
-        <div class="info-row">
-            <span class="channel-name">@wiedmanhub</span>
-            <span class="video-date">📅 14 feb 2026</span>
-            <span class="video-views">👁️ 1,234</span>
-            <span class="video-counter">🎬 1/1</span>
-        </div>
+    <div id="video-container" class="card">
+        <!-- EL CONTENIDO SE GENERA CON JAVASCRIPT -->
     </div>
+
+    <script>
+        // 🟢 LISTA DE 5 VIDEOS (PUEDES EDITARLOS)
+        const videos = [
+            {
+                type: 'video',  // 'video' o 'imagen'
+                videoUrl: 'https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video.mp4',
+                thumbnail: 'https://i.ytimg.com/vi/2xKgRUMTJkI/mqdefault.jpg',
+                title: 'PRIMER VIDEO - AGHARTA',
+                description: 'Video promocional de Agharta',
+                date: '14 feb 2026',
+                views: '1,234'
+            },
+            {
+                type: 'imagen',  // SOLO MINIATURA
+                videoUrl: '',    // VACÍO = USA MINIATURA
+                thumbnail: 'https://i.ytimg.com/vi/2xKgRUMTJkI/hqdefault.jpg',
+                title: 'USTEDES DECIDEN LA SERIE',
+                description: 'En este video decidimos qué serie vamos a ver...',
+                date: '10 feb 2026',
+                views: '1,234'
+            },
+            {
+                type: 'video',
+                videoUrl: 'https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video_2.mp4',
+                thumbnail: 'https://i.ytimg.com/vi/i5HiFgEzf4c/mqdefault.jpg',
+                title: 'LO QUE SUCEDIO EN EL CANAL',
+                description: 'Actualización importante...',
+                date: '8 feb 2026',
+                views: '892'
+            },
+            {
+                type: 'video',
+                videoUrl: 'https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video_3.mp4',
+                thumbnail: 'https://i.ytimg.com/vi/hRmHn9mWqu4/mqdefault.jpg',
+                title: 'REGRESAMOS CON TODO',
+                description: 'Estamos de vuelta este 2026',
+                date: '5 feb 2026',
+                views: '2,567'
+            },
+            {
+                type: 'imagen',  // SOLO MINIATURA
+                videoUrl: '',
+                thumbnail: 'https://i.ytimg.com/vi/fFCGjC5P2C4/mqdefault.jpg',
+                title: 'NAVIDAD 2025',
+                description: 'Especial de navidad',
+                date: '25 dic 2025',
+                views: '5,678'
+            }
+        ];
+
+        let currentIndex = 0;
+        const container = document.getElementById('video-container');
+
+        function mostrarVideo(index) {
+            const video = videos[index];
+            
+            let contenido = '';
+            
+            if (video.type === 'video' && video.videoUrl) {
+                // 🎬 REPRODUCIR VIDEO
+                contenido = `
+                    <video autoplay loop muted playsinline>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        Tu navegador no soporta video.
+                    </video>
+                `;
+            } else {
+                // 🖼️ MOSTRAR MINIATURA
+                contenido = `<img src="${video.thumbnail}" alt="${video.title}">`;
+            }
+
+            container.innerHTML = `
+                <div class="thumb">
+                    ${contenido}
+                    <div class="live">ARCHIVO W</div>
+                    <div class="progress"><div class="bar"></div></div>
+                </div>
+                <div class="title">${video.title}</div>
+                <div class="description">${video.description}</div>
+                <div class="info-row">
+                    <span class="channel-name">@wiedmanhub</span>
+                    <span class="video-date">📅 ${video.date}</span>
+                    <span class="video-views">👁️ ${video.views}</span>
+                    <span class="video-counter">🎬 ${index + 1}/${videos.length}</span>
+                </div>
+            `;
+        }
+
+        // 🟢 MOSTRAR EL PRIMERO
+        mostrarVideo(currentIndex);
+
+        // 🟢 CAMBIAR CADA 30 SEGUNDOS
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % videos.length;
+            mostrarVideo(currentIndex);
+        }, 30000);
+    </script>
 </body>
 </html>
-
-
