@@ -1,8 +1,89 @@
-<!DOCTYPE html>
+export default {
+  async fetch(request) {
+    // 🔴 SECCIÓN MANUAL - TÚ EDITAS ESTO DIRECTAMENTE
+    // =================================================
+    // 🎬 Si pones videoEmbed, se REPRODUCE EL VIDEO
+    // 🖼️ Si NO pones videoEmbed, se muestra MINIATURA
+    const MANUAL_VIDEOS = [
+      { 
+        id: 'VIDEO_ID_1',
+        title: 'USTEDES DECIDEN LA SERIE',
+        description: 'En este video decidimos qué serie vamos a ver...',
+        thumbnail: 'https://i.ytimg.com/vi/2xKgRUMTJkI/mqdefault.jpg',
+        videoEmbed: 'https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video.mp4', // ← TU VIDEO
+        date: '10 feb 2026',
+        views: '1,234'
+      },
+      { 
+        id: 'VIDEO_ID_2',
+        title: 'LO QUE SUCEDIO EN EL CANAL',
+        description: 'Actualización importante...',
+        thumbnail: 'https://i.ytimg.com/vi/i5HiFgEzf4c/mqdefault.jpg',
+        videoEmbed: '', // ← VACÍO = USA MINIATURA
+        date: '8 feb 2026',
+        views: '892'
+      }
+    ];
+
+    // 🔴 TU API KEY (PONLA AQUÍ)
+    const API_KEY = 'AIzaSyCVAn_8PFMPIDcM_ozGMLr-yd-mNDvUGPU'; // ← PEGA TU API KEY AQUÍ
+    const CHANNEL_ID = 'UCIbWfCngxTPu8Qp4VyN97XA'; // ← TU CANAL
+    
+    let videos = MANUAL_VIDEOS; // Por defecto, usa manual
+
+    // 🟢 INTENTAR USAR API (solo si hay API_KEY)
+    if (API_KEY && API_KEY.trim() !== '') {
+      try {
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&order=date&maxResults=5&type=video`;
+        const searchRes = await fetch(searchUrl);
+        
+        if (searchRes.ok) {
+          const searchData = await searchRes.json();
+          
+          if (searchData.items && searchData.items.length > 0) {
+            const videoIds = searchData.items.map(item => item.id.videoId).join(',');
+            
+            const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=statistics,snippet`;
+            const detailsRes = await fetch(detailsUrl);
+            
+            if (detailsRes.ok) {
+              const detailsData = await detailsRes.json();
+              
+              videos = detailsData.items.map(item => ({
+                id: item.id,
+                title: item.snippet.title || 'Sin título',
+                description: item.snippet.description.substring(0, 80) + (item.snippet.description.length > 80 ? '...' : ''),
+                thumbnail: `https://i.ytimg.com/vi/${item.id}/mqdefault.jpg`,
+                videoEmbed: `https://www.youtube.com/embed/${item.id}?autoplay=1&mute=1&loop=1&playlist=${item.id}`,
+                date: new Date(item.snippet.publishedAt).toLocaleDateString('es-CO', { 
+                  day: 'numeric', month: 'short', year: 'numeric' 
+                }),
+                views: parseInt(item.statistics.viewCount || 0).toLocaleString()
+              }));
+            }
+          }
+        }
+      } catch (error) {
+        console.log('API falló, usando videos manuales');
+      }
+    }
+
+    const url = new URL(request.url);
+    let index = parseInt(url.searchParams.get('v') || '0');
+    if (isNaN(index) || index >= videos.length) index = 0;
+    
+    const nextIndex = (index + 1) % videos.length;
+    const nextUrl = `${url.pathname}?v=${nextIndex}`;
+    const video = videos[index];
+
+    // 🟢 DETECTAR SI HAY VIDEO EMBEBIDO
+    const tieneVideo = video.videoEmbed && video.videoEmbed.trim() !== '';
+
+    const html = `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="30">
+    <meta http-equiv="refresh" content="30;url=${nextUrl}">
     <meta http-equiv="Cache-Control" content="no-cache, no-store">
     <title>@wiedmanhub - ARCHIVO W</title>
     <style>
@@ -38,6 +119,12 @@
             flex-shrink: 0;
         }
         .thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -129,23 +216,37 @@
 <body>
     <div class="card">
         <div class="thumb">
-            <video autoplay loop muted playsinline>
-                <source src="https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video.mp4" type="video/mp4">
-                Tu navegador no soporta la etiqueta de video.
-            </video>
+            ${tieneVideo ? 
+              `<video autoplay loop muted playsinline>
+                  <source src="${video.videoEmbed}" type="video/mp4">
+                  Tu navegador no soporta la etiqueta de video.
+               </video>` : 
+              `<img src="${video.thumbnail}" 
+                    onerror="this.src='https://i.ytimg.com/vi/${video.id}/default.jpg'">`
+            }
             <div class="live">ARCHIVO W</div>
             <div class="progress"><div class="bar"></div></div>
         </div>
         
-        <div class="title">Título de tu video local</div>
-        <div class="description">Descripción opcional para el video.</div>
+        <div class="title" title="${video.title}">${video.title}</div>
+        <div class="description" title="${video.description}">${video.description || 'Sin descripción disponible'}</div>
         
         <div class="info-row">
             <span class="channel-name">@wiedmanhub</span>
-            <span class="video-date">📅 14 feb 2026</span>
-            <span class="video-views">👁️ ---</span>
-            <span class="video-counter">🎬 1/1</span>
+            <span class="video-date">📅 ${video.date}</span>
+            <span class="video-views">👁️ ${video.views || '---'}</span>
+            <span class="video-counter">🎬 ${index + 1}/${videos.length}</span>
         </div>
     </div>
 </body>
-</html>
+</html>`;
+
+    return new Response(html, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache, no-store',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+  }
+}
