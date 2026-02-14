@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="30">
     <meta http-equiv="Cache-Control" content="no-cache, no-store">
     <title>@wiedmanhub - ARCHIVO W</title>
     <style>
@@ -17,8 +16,8 @@
             padding: 20px;
         }
         .card {
-            width: 400px;
-            height: 295px;
+            width: 380px;
+            height: 300px;
             background: rgba(15,20,30,0.2);
             backdrop-filter: blur(12px);
             border-radius: 20px;
@@ -37,7 +36,7 @@
             background: #000;
             flex-shrink: 0;
         }
-        .thumb video, .thumb img {
+        .thumb video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -127,106 +126,151 @@
     </style>
 </head>
 <body>
-    <div id="video-container" class="card">
-        <!-- EL CONTENIDO SE GENERA CON JAVASCRIPT -->
+    <div class="card" id="videoContainer">
+        <div class="thumb" id="videoThumb">
+            <video autoplay muted playsinline id="mainVideo" style="width:100%; height:100%;">
+                <source id="videoSource" src="" type="video/mp4">
+            </video>
+            <div class="live">Youtube Live</div>
+            <div class="progress"><div class="bar"></div></div>
+        </div>
+        
+        <div class="title" id="videoTitle">Cargando...</div>
+        <div class="description" id="videoDescription">Cargando...</div>
+        
+        <div class="info-row">
+            <span class="channel-name">@wiedmanhub</span>
+            <span class="video-date" id="videoDate">📅 --</span>
+            <span class="video-views" id="videoViews">👁️ ---</span>
+            <span class="video-counter" id="videoCounter">🎬 0/0</span>
+        </div>
     </div>
 
     <script>
-        // 🟢 LISTA DE 5 VIDEOS (PUEDES EDITARLOS)
-        const videos = [
+        // 🟢🔴 SOLO TIENES QUE PONER LAS URLs DE TUS VIDEOS AQUÍ 🔴🟢
+        const VIDEOS = [
             {
-                type: 'video',  // 'video' o 'imagen'
-                videoUrl: 'https://ia903107.us.archive.org/23/items/como-era-realmente-jesus-la-apariencia-olvidada-por-la-historia-mas-alla-de-la-imagen-tradicional/%C2%BFC%C3%B3mo%20Era%20Realmente%20Jes%C3%BAs_%20La%20Apariencia%20Olvidada%20por%20la%20Historia%2C%20M%C3%A1s%20All%C3%A1%20de%20la%20Imagen%20Tradicional.mp4',
-                thumbnail: 'https://i.ytimg.com/vi/2xKgRUMTJkI/mqdefault.jpg',
-                title: 'PRIMER VIDEO - AGHARTA',
-                description: 'Video promocional de Agharta',
-                date: '14 feb 2026',
-                views: '1,234'
+                url: 'https://ia903107.us.archive.org/23/items/como-era-realmente-jesus-la-apariencia-olvidada-por-la-historia-mas-alla-de-la-imagen-tradicional/%C2%BFC%C3%B3mo%20Era%20Realmente%20Jes%C3%BAs_%20La%20Apariencia%20Olvidada%20por%20la%20Historia%2C%20M%C3%A1s%20All%C3%A1%20de%20la%20Imagen%20Tradicional.mp4',
+                identifier: 'como-era-realmente-jesus-la-apariencia-olvidada-por-la-historia-mas-alla-de-la-imagen-tradicional'
             },
             {
-                type: 'imagen',  // SOLO MINIATURA
-                videoUrl: 'https://drive.google.com/uc?export=download&id=1Zdwqy6kRWcgXllr6V5DFsTRHrWPdJHQa',    // VACÍO = USA MINIATURA
-                thumbnail: 'https://i.ytimg.com/vi/2xKgRUMTJkI/hqdefault.jpg',
-                title: 'USTEDES DECIDEN LA SERIE',
-                description: 'En este video decidimos qué serie vamos a ver...',
-                date: '10 feb 2026',
-                views: '1,234'
+                url: 'https://ia903204.us.archive.org/5/items/somos-mas-que-un-cuerpo-el-experimento-gateway-y-la-prueba-del-alma/%C2%BFSomos%20M%C3%A1s%20Que%20un%20Cuerpo_%20El%20Experimento%20Gateway%20y%20la%20Prueba%20del%20Alma.mp4',  // ← PON AQUÍ TU SEGUNDA URL
+                identifier: 'IDENTIFICADOR_DEL_SEGUNDO_VIDEO'  // ← IDENTIFICADOR (opcional)
             },
             {
-                type: 'video',
-                videoUrl: 'https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video_2.mp4',
-                thumbnail: 'https://i.ytimg.com/vi/i5HiFgEzf4c/mqdefault.jpg',
-                title: 'LO QUE SUCEDIO EN EL CANAL',
-                description: 'Actualización importante...',
-                date: '8 feb 2026',
-                views: '892'
+                url: 'https://ia600407.us.archive.org/7/items/nacemos-con-maldad-la-verdad-sobre-el-origen-del-mal-humano-humannature-darkpsychology-devil/%C2%BFNacemos%20con%20Maldad_%20%20La%20Verdad%20Sobre%20el%20Origen%20del%20Mal%20Humano%20%23humannature%20%20%23darkpsychology%20%23devil.mp4',  // ← PON AQUÍ TU TERCERA URL
+                identifier: 'IDENTIFICADOR_DEL_TERCER_VIDEO'
             },
             {
-                type: 'video',
-                videoUrl: 'https://wiedman.com.co/wp-content/uploads/2026/02/agharta_video_3.mp4',
-                thumbnail: 'https://i.ytimg.com/vi/hRmHn9mWqu4/mqdefault.jpg',
-                title: 'REGRESAMOS CON TODO',
-                description: 'Estamos de vuelta este 2026',
-                date: '5 feb 2026',
-                views: '2,567'
+                url: 'https://ia601003.us.archive.org/18/items/agharta-los-documentos-clasificados-que-prueban-la-civilizacion-bajo-nuestros-pies-secretos-nazi/AGHARTA_%20Los%20DOCUMENTOS%20CLASIFICADOS%20que%20Prueban%20la%20Civilizaci%C3%B3n%20Bajo%20Nuestros%20Pies%20_%20Secretos%20Nazi.mp4',  // ← PON AQUÍ TU CUARTA URL
+                identifier: 'IDENTIFICADOR_DEL_CUARTO_VIDEO'
             },
             {
-                type: 'imagen',  // SOLO MINIATURA
-                videoUrl: '',
-                thumbnail: 'https://i.ytimg.com/vi/fFCGjC5P2C4/mqdefault.jpg',
-                title: 'NAVIDAD 2025',
-                description: 'Especial de navidad',
-                date: '25 dic 2025',
-                views: '5,678'
+                url: 'https://ia903209.us.archive.org/35/items/que-hay-despue-s-de-morir-la-respuesta-que-cambiara-tu-forma-de-vivir-muerte-masalla-despertar/%C2%BFQu%C3%A9%20hay%20DESPU%C3%89S%20de%20morir_%20La%20RESPUESTA%20que%20cambiar%C3%A1%20tu%20forma%20de%20vivir%20%23muerte%20%23m%C3%A1sall%C3%A1%20%23despertar.mp4',  // ← PON AQUÍ TU QUINTA URL
+                identifier: 'IDENTIFICADOR_DEL_QUINTO_VIDEO'
             }
-        ];
+        ].filter(v => v.url && v.url !== 'URL_DEL_SEGUNDO_VIDEO_AQUI'); // Elimina videos vacíos
 
         let currentIndex = 0;
-        const container = document.getElementById('video-container');
+        const videoElement = document.getElementById('mainVideo');
+        const videoSource = document.getElementById('videoSource');
+        const titleElement = document.getElementById('videoTitle');
+        const descElement = document.getElementById('videoDescription');
+        const dateElement = document.getElementById('videoDate');
+        const viewsElement = document.getElementById('videoViews');
+        const counterElement = document.getElementById('videoCounter');
 
-        function mostrarVideo(index) {
-            const video = videos[index];
-            
-            let contenido = '';
-            
-            if (video.type === 'video' && video.videoUrl) {
-                // 🎬 REPRODUCIR VIDEO
-                contenido = `
-                    <video autoplay loop muted playsinline>
-                        <source src="${video.videoUrl}" type="video/mp4">
-                        Tu navegador no soporta video.
-                    </video>
-                `;
-            } else {
-                // 🖼️ MOSTRAR MINIATURA
-                contenido = `<img src="${video.thumbnail}" alt="${video.title}">`;
+        // Función para cargar metadata desde Archive.org
+        async function cargarMetadata(identifier) {
+            try {
+                const response = await fetch(`https://archive.org/metadata/${identifier}`);
+                const data = await response.json();
+                
+                return {
+                    title: data.metadata?.title || 'Sin título',
+                    description: data.metadata?.description || 'Sin descripción disponible',
+                    date: data.metadata?.date ? new Date(data.metadata.date).toLocaleDateString('es-CO', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    }) : '14 feb 2026',
+                    views: data.metadata?.downloads || '---'
+                };
+            } catch (error) {
+                console.log('Error cargando metadata, usando valores por defecto');
+                return {
+                    title: 'Video de Archive.org',
+                    description: 'Documental',
+                    date: '14 feb 2026',
+                    views: '---'
+                };
             }
-
-            container.innerHTML = `
-                <div class="thumb">
-                    ${contenido}
-                    <div class="live">ARCHIVO W</div>
-                    <div class="progress"><div class="bar"></div></div>
-                </div>
-                <div class="title">${video.title}</div>
-                <div class="description">${video.description}</div>
-                <div class="info-row">
-                    <span class="channel-name">@wiedmanhub</span>
-                    <span class="video-date">📅 ${video.date}</span>
-                    <span class="video-views">👁️ ${video.views}</span>
-                    <span class="video-counter">🎬 ${index + 1}/${videos.length}</span>
-                </div>
-            `;
         }
 
-        // 🟢 MOSTRAR EL PRIMERO
-        mostrarVideo(currentIndex);
+        // Función para cambiar al siguiente video
+        async function reproducirSiguiente() {
+            if (VIDEOS.length === 0) return;
+            
+            const video = VIDEOS[currentIndex];
+            
+            // Cambiar la fuente del video
+            videoSource.src = video.url;
+            videoElement.load();
+            videoElement.play();
+            
+            // Actualizar contador
+            counterElement.textContent = `🎬 ${currentIndex + 1}/${VIDEOS.length}`;
+            
+            // Cargar metadata si hay identifier
+            if (video.identifier && video.identifier !== 'IDENTIFICADOR_DEL_SEGUNDO_VIDEO') {
+                const metadata = await cargarMetadata(video.identifier);
+                titleElement.textContent = metadata.title;
+                descElement.textContent = metadata.description.substring(0, 80) + 
+                    (metadata.description.length > 80 ? '...' : '');
+                dateElement.innerHTML = `📅 ${metadata.date}`;
+                viewsElement.innerHTML = `👁️ ${metadata.views}`;
+            } else {
+                // Valores por defecto
+                titleElement.textContent = 'Video en reproducción';
+                descElement.textContent = 'Contenido audiovisual';
+                dateElement.innerHTML = '📅 14 feb 2026';
+                viewsElement.innerHTML = '👁️ ---';
+            }
+            
+            // Avanzar al siguiente índice para la próxima vez
+            currentIndex = (currentIndex + 1) % VIDEOS.length;
+        }
 
-        // 🟢 CAMBIAR CADA 30 SEGUNDOS
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % videos.length;
-            mostrarVideo(currentIndex);
-        }, 30000);
+        // Escuchar cuando el video termina
+        videoElement.addEventListener('ended', reproducirSiguiente);
+
+        // Iniciar con el primer video
+        if (VIDEOS.length > 0) {
+            // Mostrar el primer video sin avanzar el índice
+            const primerVideo = VIDEOS[0];
+            videoSource.src = primerVideo.url;
+            videoElement.load();
+            videoElement.play();
+            counterElement.textContent = `🎬 1/${VIDEOS.length}`;
+            
+            // Cargar metadata del primer video
+            if (primerVideo.identifier && primerVideo.identifier !== 'IDENTIFICADOR_DEL_SEGUNDO_VIDEO') {
+                (async () => {
+                    const metadata = await cargarMetadata(primerVideo.identifier);
+                    titleElement.textContent = metadata.title;
+                    descElement.textContent = metadata.description.substring(0, 80) + 
+                        (metadata.description.length > 80 ? '...' : '');
+                    dateElement.innerHTML = `📅 ${metadata.date}`;
+                    viewsElement.innerHTML = `👁️ ${metadata.views}`;
+                })();
+            }
+            
+            // Establecer el índice para el siguiente video
+            currentIndex = 1 % VIDEOS.length;
+        }
+
+        // Si solo hay un video, que se repita infinitamente
+        if (VIDEOS.length === 1) {
+            videoElement.loop = true;
+        }
     </script>
 </body>
 </html>
